@@ -32,7 +32,6 @@
 package p2t
 
 import (
-	"container/vector"
 	"container/list"
 )
 
@@ -45,7 +44,7 @@ const kAlpha = 0.3
 type SweepContext struct {
 	basin      *Basin
 	edge_event *EdgeEvent
-	edge_list  *vector.Vector
+	edge_list  []Edge
 
 	triangles *list.List
 	points    PointArray
@@ -80,7 +79,7 @@ func (b *Basin) Clear() {
 
 func (s *SweepContext) init(polyline []*Point) {
 	s.triangles = list.New()
-	s.edge_list = new(vector.Vector)
+	s.edge_list = []Edge{}
 	s.tmap = list.New()
 	s.basin = new(Basin)
 	s.edge_event = new(EdgeEvent)
@@ -134,9 +133,9 @@ func (s *SweepContext) initEdges(polyline []*Point) {
 		}
 		var p1 = polyline[i]
 		var p2 = polyline[j]
-		var e = new(Edge)
+		var e = Edge{}
 		e.init(p1, p2)
-		s.edge_list.Push(e)
+		s.edge_list = append(s.edge_list, e)
 	}
 }
 
